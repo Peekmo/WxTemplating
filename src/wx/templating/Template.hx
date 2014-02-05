@@ -28,7 +28,7 @@ class Template
     private function print(parameters: Dynamic) : String
     {
         var data: String = this.resource;
-        var reg = ~/{{[ ]*([a-z]+)[ ]*}}/g;
+        var reg = ~/{{[ ]*([^{]+)[ ]*}}/g;
 
         while (null != data) {
             if (!reg.match(data)) break;
