@@ -71,7 +71,28 @@ class Template
             object = this.parameters;
         }
 
+        // To save dots in functions's parameters
+        var params = ~/\(([^\)]+)\)*/g;
+        var data = variable;
+
+        while (null != data) {
+            if (!params.match(data)) {
+                break;
+            }
+
+            data = params.matchedRight();
+            variable = StringTools.replace(variable, params.matched(1), StringTools.replace(params.matched(1), '.', '#:#'));
+        }
+
         var pieces : Array<String> = StringTools.trim(variable).split('.');
+
+        var iterator : IntIterator = new IntIterator(0, pieces.length);
+        for (p in iterator) {
+            pieces[p] = StringTools.replace(pieces[p], '#:#', '.');
+        }
+
+        trace(pieces);
+
         var data = Reflect.field(object, pieces[0]);
 
         if (1 == pieces.length) {
